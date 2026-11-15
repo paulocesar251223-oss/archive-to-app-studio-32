@@ -200,6 +200,12 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .player-main { max-width: 1000px; margin: auto; }
 .player-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 40; display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1000px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--background); }
 .center-tab-icon, .center-tab-icon svg { display: block; width: 30px; height: 30px; }
+.live-casino { padding: 26px 16px 30px; }
+.live-casino h1 { margin-bottom: 20px; font-size: 24px; font-weight: 650; line-height: 1.2; letter-spacing: -.025em; }
+.live-casino-list { display: grid; gap: 16px; }
+.live-casino-card { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); box-shadow: 0 12px 28px color-mix(in oklch, var(--foreground) 8%, transparent); }
+.live-casino-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 640px) { .live-casino { padding: 36px 24px 44px; } .live-casino h1 { margin-bottom: 24px; font-size: 30px; } .live-casino-list { gap: 22px; } }
 .slot-home { padding-top: 26px; overflow: hidden; }
 .slot-stage { position: relative; height: 350px; perspective: 1000px; touch-action: pan-y; user-select: none; }
 .slot-card { position: absolute; top: 8px; left: calc(50% - 117px); width: 234px; height: 320px; will-change: transform, opacity; transform-style: preserve-3d; }
