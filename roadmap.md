@@ -1,0 +1,32 @@
+# Implementation
+- [ ] Replace the player-home carousel with a single ambient Lost Temple hero, transparent machine artwork, accessible play navigation, and reduced-motion support; keep other slot components available but disabled.
+- [x] Added an audited US$ 200 test adjustment to rei.investe@gmail.com and verified it in the player wallet with a real spin.
+- [x] Rebuild Lost Temple around its carousel artwork with 3×3 reels, central/diagonal server-paid lines, illustrated symbols, gold presentation, sequential reels, win effects, sound controls, and existing bottom controls.
+- [x] Lost Temple full-screen presentation: thematic animated reels, paytable, win animation, persistent balance, bottom bet/spin controls, auto mode until stopped or balance is insufficient, and home navigation.
+- [x] Slot engine: authenticated spin endpoint for 1/10/100 spins, fixed bet ladder, secure RNG, game RTP, provably fair seeds/nonces, atomic ledger/bets SQL transaction, request idempotency, approval/exclusion/balance checks and database-backed per-user rate limiting; client animation only.
+- [x] Cashback mission: eligible deposit creates five US$ 20 daily installments, scheduled server release, configurable terms, wallet alert and progress sheet.
+- [x] Referral bot link with US$ 150 message and one-account enforcement per Telegram ID/document.
+- [x] Server-granted locked/unlocked achievement badges at the end of the wallet.
+- [x] Verify mission, referral and achievement rules with automated tests and a signed-in wallet flow.
+- [ ] Wallet/profile: trading-style overview, referral sharing, USDC deposit details, ledger history, achievements and server-reserved Solana withdrawals; verify signed-in flow.
+- [ ] Player home: circular 3D slots, approved-only navigation, EN/RU settings, server-saved limits and self-exclusion; verify signed-in flow.
+- [x] Restore signup profile creation, repair the missing account profile, and verify signed-in dashboard loading.
+- [x] Account screens: sign-in, registration with optional referral, password recovery.
+- [x] Private KYC submission and status-based account screens.
+- [x] Black theme, English/Russian text and Settings language switch.
+- [x] Server-verified, unique Telegram account linking.
+- [x] Automated tests and public browser checks.
+- [ ] Admin database rules: AAL2 staff access, KYC review, audited ledger and withdrawal transitions, settings and reports.
+- [ ] Admin /admin shell with role navigation and TOTP enrollment/challenge.
+- [ ] KYC queue with temporary signed document URLs and wallet-on-approval.
+- [ ] Player directory and player page with bets, finances, achievements and referrals.
+- [ ] Withdrawal, user, settings, reports and audit screens.
+- [ ] Verify admin rules with automated tests and a signed-in admin browser flow.
+- [ ] Authenticated KYC/status end-to-end checks: blocked by absence of a registered, confirmed user.
+- [ ] Real email confirmation/recovery and Telegram mini-app linking: require real email and signed initData.
+
+# Migration to this project
+- [x] Copy app code and rebuild the database, ID photo storage and daily cashback job.
+- [ ] Import existing players and records: blocked on CSV/JSON exports from the old project.
+- [ ] Telegram linking: blocked on the Telegram bot token.
+- [ ] Assign first staff (admin) account: blocked on the owner signing up.

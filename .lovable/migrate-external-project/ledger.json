@@ -1,0 +1,65 @@
+[
+ {
+  "capability": "code",
+  "source": "TanStack app (routes, components, i18n, slot engine)",
+  "outcome": "migrate",
+  "status": "verified",
+  "next_action": "none"
+ },
+ {
+  "capability": "schema",
+  "source": "base schema missing from archive; drizzle incrementals + types.ts",
+  "outcome": "migrate (rebuild from code, user approved)",
+  "status": "verified",
+  "next_action": "none (rebuilt, checked with a rolled-back test)"
+ },
+ {
+  "capability": "records",
+  "source": "old Cloud database",
+  "outcome": "migrate",
+  "status": "pending",
+  "next_action": "request CSV exports"
+ },
+ {
+  "capability": "auth identities",
+  "source": "old Cloud auth",
+  "outcome": "migrate",
+  "status": "pending",
+  "next_action": "request user export"
+ },
+ {
+  "capability": "authorization",
+  "source": "user_roles/has_role/is_staff",
+  "outcome": "migrate",
+  "status": "verified",
+  "next_action": "assign first admin after signup"
+ },
+ {
+  "capability": "kyc file bytes",
+  "source": "private storage bucket",
+  "outcome": "migrate",
+  "status": "pending",
+  "next_action": "request files"
+ },
+ {
+  "capability": "cron release-cashback",
+  "source": "/api/public/jobs/release-cashback",
+  "outcome": "preserve",
+  "status": "verified",
+  "next_action": "none"
+ },
+ {
+  "capability": "telegram linking",
+  "source": "TELEGRAM_BOT_TOKEN",
+  "outcome": "preserve",
+  "status": "pending",
+  "next_action": "secret before verification"
+ },
+ {
+  "capability": "verification",
+  "source": "-",
+  "outcome": "verify",
+  "status": "partial",
+  "next_action": "signed-in end-to-end flow after first account"
+ }
+]

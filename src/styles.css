@@ -53,6 +53,13 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-parchment: var(--parchment);
+  --color-parchment-foreground: var(--parchment-foreground);
+  --color-flame: var(--flame);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -153,3 +160,118 @@
     color: var(--color-foreground);
   }
 }
+
+:root, .dark {
+  --radius: 0.375rem;
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.96 0 0);
+  --card: oklch(0.12 0 0);
+  --card-foreground: oklch(0.96 0 0);
+  --popover: oklch(0.14 0 0);
+  --popover-foreground: oklch(0.96 0 0);
+  --primary: oklch(0.96 0 0);
+  --primary-foreground: oklch(0.08 0 0);
+  --secondary: oklch(0.19 0 0);
+  --secondary-foreground: oklch(0.96 0 0);
+  --muted: oklch(0.16 0 0);
+  --muted-foreground: oklch(0.66 0 0);
+  --accent: oklch(0.22 0 0);
+  --accent-foreground: oklch(0.96 0 0);
+  --border: oklch(0.25 0 0);
+  --input: oklch(0.3 0 0);
+  --ring: oklch(0.75 0 0);
+  --destructive: oklch(0.72 0.17 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.72 0.17 155);
+  --success-foreground: oklch(0.08 0.01 155);
+  --gold: oklch(0.79 0.16 85);
+  --gold-foreground: oklch(0.16 0.04 70);
+  --parchment: oklch(0.86 0.08 85);
+  --parchment-foreground: oklch(0.24 0.06 65);
+  --flame: oklch(0.72 0.2 45);
+}
+body { font-family: 'Manrope', sans-serif; letter-spacing: 0; }
+input, select, textarea { min-height: 48px; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+
+:root, .dark { --slot-temple: oklch(.78 .14 85); --slot-jungle: oklch(.76 .16 150); --slot-crystal: oklch(.82 .12 210); --player-overlay: oklch(0 0 0 / .9); --temple-ambient-center: oklch(.24 .065 65); --temple-ambient-edge: oklch(.06 .012 60); --temple-silhouette: oklch(.25 .045 70); --temple-torch: oklch(.66 .19 48); --temple-mist: oklch(.55 .055 75 / .12); }
+.player-shell { min-height: 100dvh; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+.player-header { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; max-width: 1000px; margin: auto; padding: calc(12px + env(safe-area-inset-top)) 20px 12px; border-bottom: 1px solid var(--border); background: var(--background); }
+.player-main { max-width: 1000px; margin: auto; }
+.player-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 40; display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1000px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--background); }
+.center-tab-icon, .center-tab-icon svg { display: block; width: 30px; height: 30px; }
+.slot-home { padding-top: 26px; overflow: hidden; }
+.slot-stage { position: relative; height: 350px; perspective: 1000px; touch-action: pan-y; user-select: none; }
+.slot-card { position: absolute; top: 8px; left: calc(50% - 117px); width: 234px; height: 320px; will-change: transform, opacity; transform-style: preserve-3d; }
+.slot-temple { --slot-color: var(--slot-temple); }
+.slot-jungle { --slot-color: var(--slot-jungle); }
+.slot-crystal { --slot-color: var(--slot-crystal); }
+.slot-position-0 { z-index: 3; }
+.slot-position-1, .slot-position--1 { z-index: 1; }
+.slot-art-button { width: 100%; height: 100%; padding: 0; display: block; overflow: hidden; border-radius: 8px; background: var(--background); }
+.slot-art-button:hover { background: var(--background); }
+.slot-art-button img { width: 100%; height: 100%; object-fit: contain; }
+.slot-position-0 .slot-art-button { box-shadow: 0 0 24px color-mix(in oklch, var(--slot-color) 20%, transparent); }
+.slot-play { position: absolute; bottom: 4px; left: 20%; width: 60%; height: 42px; background: var(--slot-color); color: var(--background); border: 1px solid color-mix(in oklch, var(--slot-color) 80%, var(--foreground)); }
+.slot-play:hover { background: var(--slot-color); filter: brightness(1.1); }
+.slot-caption { padding: 8px 12px 20px; }
+.game-cover { width: 260px; max-height: 55dvh; object-fit: contain; }
+@media (min-width: 640px) { .slot-home { padding-top: 44px; } .slot-stage { height: 460px; } .slot-card { left: calc(50% - 165px); width: 330px; height: 440px; } .slot-play { bottom: 12px; } }
+.temple-machine { filter: drop-shadow(0 14px 32px color-mix(in oklch, var(--gold) 16%, transparent)); }
+.temple-reel-window { box-shadow: inset 0 0 18px color-mix(in oklch, var(--gold) 35%, transparent); }
+.temple-win-card { box-shadow: 0 0 45px color-mix(in oklch, var(--gold) 45%, transparent); }
+.temple-controls { box-shadow: 0 -12px 40px color-mix(in oklch, var(--gold) 12%, transparent); }
+.torch-flame { position: absolute; z-index: 2; width: 3.5%; height: 5%; border-radius: 60% 40% 55% 45%; background: var(--flame); filter: blur(2px); opacity: .65; transform-origin: 50% 100%; animation: temple-flame .5s ease-in-out infinite alternate; pointer-events: none; }
+.torch-flame:nth-of-type(even) { animation-delay: -.25s; animation-duration: .38s; }
+.temple-symbol-win { animation: temple-symbol-glow .55s ease-in-out infinite alternate; }
+.temple-coin { position: absolute; top: 10%; width: 13px; height: 13px; border: 2px solid var(--gold-foreground); border-radius: 999px; background: var(--gold); box-shadow: 0 0 8px color-mix(in oklch, var(--gold) 70%, transparent); animation: temple-coin-rain 1.35s cubic-bezier(.3,.65,.55,1) infinite; }
+@keyframes temple-flame { from { transform: translateY(-50%) scale(.85, 1) rotate(-4deg); opacity: .45; } to { transform: translateY(-58%) scale(1.15, 1.25) rotate(5deg); opacity: .8; } }
+@keyframes temple-symbol-glow { from { filter: brightness(1) drop-shadow(0 0 1px var(--gold)); } to { filter: brightness(1.3) drop-shadow(0 0 9px var(--gold)); } }
+@keyframes temple-coin-rain { 0% { transform: translateY(-20px) rotate(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(430px) rotate(540deg); opacity: 0; } }
+.temple-hero { position: relative; isolation: isolate; min-height: calc(100dvh - 156px); overflow: hidden; background: var(--background); }
+.temple-environment, .temple-ambient-light, .temple-silhouettes, .temple-god-rays, .temple-particles, .temple-mist { position: absolute; inset: 0; pointer-events: none; }
+.temple-environment { z-index: -1; overflow: hidden; }
+.temple-ambient-light { background: radial-gradient(ellipse at 50% 40%, var(--temple-ambient-center) 0%, var(--temple-ambient-edge) 52%, var(--background) 82%); }
+.temple-silhouettes { opacity: .2; filter: blur(2px); }
+.temple-column { position: absolute; bottom: 8%; width: 10%; height: 64%; background: linear-gradient(90deg, transparent, var(--temple-silhouette) 22%, var(--temple-silhouette) 78%, transparent); clip-path: polygon(12% 0, 88% 0, 88% 4%, 76% 7%, 72% 91%, 92% 94%, 92% 100%, 8% 100%, 8% 94%, 28% 91%, 24% 7%, 12% 4%); }
+.temple-column-left-outer { left: -2%; transform: scale(1.3); }
+.temple-column-left-inner { left: 11%; transform: scale(.82); transform-origin: bottom; }
+.temple-column-right-inner { right: 11%; transform: scale(.82); transform-origin: bottom; }
+.temple-column-right-outer { right: -2%; transform: scale(1.3); }
+.temple-steps { position: absolute; bottom: 0; left: 5%; width: 90%; height: 22%; background: repeating-linear-gradient(to top, var(--temple-silhouette) 0 16%, transparent 16% 23%); clip-path: polygon(18% 0, 82% 0, 82% 20%, 88% 20%, 88% 40%, 94% 40%, 94% 60%, 100% 60%, 100% 100%, 0 100%, 0 60%, 6% 60%, 6% 40%, 12% 40%, 12% 20%, 18% 20%); }
+.temple-foliage { position: absolute; bottom: -4%; width: 42%; height: 58%; opacity: .55; filter: blur(9px); background: radial-gradient(ellipse at 20% 80%, var(--temple-silhouette) 0 12%, transparent 13%), radial-gradient(ellipse at 48% 64%, var(--temple-silhouette) 0 14%, transparent 15%), radial-gradient(ellipse at 70% 85%, var(--temple-silhouette) 0 18%, transparent 19%), radial-gradient(ellipse at 36% 94%, var(--temple-silhouette) 0 22%, transparent 23%); }
+.temple-foliage-left { left: -16%; transform: rotate(14deg); }
+.temple-foliage-right { right: -16%; transform: scaleX(-1) rotate(14deg); }
+.temple-god-rays { overflow: hidden; }
+.temple-god-rays span { position: absolute; top: -18%; width: 16%; height: 105%; transform-origin: 50% 0; background: linear-gradient(to bottom, color-mix(in oklch, var(--gold) 18%, transparent), transparent 76%); clip-path: polygon(43% 0, 57% 0, 100% 100%, 0 100%); filter: blur(7px); opacity: .13; will-change: transform, opacity; animation: temple-rays 13s ease-in-out infinite alternate; }
+.temple-god-rays span:nth-child(even) { width: 11%; animation-duration: 17s; }
+.temple-torch-light { position: absolute; top: 30%; width: 48%; height: 55%; border-radius: 50%; background: radial-gradient(ellipse, color-mix(in oklch, var(--temple-torch) 28%, transparent), transparent 68%); filter: blur(20px); opacity: .25; will-change: transform, opacity; animation: temple-torch-flicker 3.1s ease-in-out infinite alternate; }
+.temple-torch-light-left { left: -23%; }
+.temple-torch-light-right { right: -23%; animation-delay: -1.7s; animation-duration: 2.7s; }
+.temple-particles { overflow: hidden; }
+.temple-particles span { position: absolute; left: var(--particle-x); bottom: -3%; width: var(--particle-size); height: var(--particle-size); border-radius: 50%; background: var(--gold); box-shadow: 0 0 7px color-mix(in oklch, var(--gold) 65%, transparent); opacity: 0; will-change: transform, opacity; animation: temple-particle-rise var(--particle-duration) linear var(--particle-delay) infinite; }
+.temple-dust { opacity: .55; filter: blur(.35px); }
+.temple-embers span { background: var(--flame); box-shadow: 0 0 9px color-mix(in oklch, var(--flame) 75%, transparent); animation-name: temple-ember-rise; }
+.temple-mist { inset: auto -20% -12%; width: 140%; height: 42%; background: radial-gradient(ellipse at 25% 65%, var(--temple-mist), transparent 58%), radial-gradient(ellipse at 72% 60%, var(--temple-mist), transparent 62%); filter: blur(18px); opacity: .65; will-change: transform, opacity; animation: temple-mist-drift 15s ease-in-out infinite alternate; }
+.temple-hero-content { position: relative; z-index: 1; display: flex; min-height: calc(100dvh - 156px); flex-direction: column; padding: 18px 0 12px; }
+.temple-hero-heading { position: relative; z-index: 3; text-align: center; }
+.temple-hero-heading p { margin-bottom: 5px; color: var(--muted-foreground); font-size: 9px; letter-spacing: .24em; }
+.temple-hero-heading h1 { color: var(--foreground); font-size: 25px; font-weight: 600; line-height: 1.2; }
+.temple-hero-heading span { display: block; margin-top: 6px; color: var(--gold); font-size: 11px; }
+.temple-machine-stage { position: relative; width: min(92vw, calc((100dvh - 238px) * .75), 520px); margin: auto; padding-bottom: 32px; }
+.temple-machine-float { position: relative; width: 100%; will-change: transform; }
+.temple-machine-aura { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: blur(22px) sepia(1) saturate(2); opacity: .36; transform: scale(1.025); will-change: opacity; animation: temple-aura-pulse 4s ease-in-out infinite; }
+.temple-machine-button { position: relative; display: block; width: 100%; height: auto; min-height: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.temple-machine-button:hover, .temple-machine-button:active { background: transparent; }
+.temple-machine-button img { position: relative; z-index: 1; display: block; width: 100%; height: auto; filter: drop-shadow(0 0 18px color-mix(in oklch, var(--gold) 18%, transparent)); }
+.temple-hero-play { position: absolute; z-index: 4; bottom: 43px; left: 50%; width: 56%; height: 48px; transform: translateX(-50%); border: 1px solid color-mix(in oklch, var(--gold) 78%, var(--foreground)); border-radius: var(--radius); background: var(--gold); color: var(--gold-foreground); box-shadow: 0 0 24px color-mix(in oklch, var(--gold) 28%, transparent); font-weight: 700; }
+.temple-hero-play:hover { background: var(--gold); filter: brightness(1.08); }
+@keyframes temple-rays { from { transform: translate3d(-2%, 0, 0) rotate(-4deg); opacity: .08; } to { transform: translate3d(3%, 0, 0) rotate(4deg); opacity: .2; } }
+@keyframes temple-torch-flicker { 0% { transform: scale(.92); opacity: .16; } 28% { transform: scale(1.04); opacity: .3; } 52% { transform: scale(.97); opacity: .22; } 76% { transform: scale(1.08); opacity: .34; } 100% { transform: scale(1); opacity: .25; } }
+@keyframes temple-particle-rise { 0% { transform: translate3d(0, 0, 0); opacity: 0; } 14% { opacity: .65; } 78% { opacity: .3; } 100% { transform: translate3d(20px, -85vh, 0); opacity: 0; } }
+@keyframes temple-ember-rise { 0% { transform: translate3d(0, 0, 0) scale(.7); opacity: 0; } 16% { opacity: .8; } 70% { opacity: .35; } 100% { transform: translate3d(-26px, -76vh, 0) scale(1.15); opacity: 0; } }
+@keyframes temple-mist-drift { from { transform: translate3d(-3%, 0, 0); opacity: .42; } to { transform: translate3d(3%, -2%, 0); opacity: .68; } }
+@keyframes temple-aura-pulse { 0%, 100% { opacity: .25; } 50% { opacity: .43; } }
+@media (min-width: 640px) { .temple-hero-content { padding-top: 24px; } .temple-hero-heading h1 { font-size: 30px; } .temple-machine-stage { width: min(72vw, calc((100dvh - 250px) * .75), 560px); } }
+@media (prefers-reduced-motion: reduce) { .temple-god-rays span, .temple-torch-light, .temple-mist, .temple-machine-aura { animation: none; } .temple-particles { display: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
