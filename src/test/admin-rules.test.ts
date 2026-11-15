@@ -15,10 +15,15 @@ describe('Admin security and money rules', () => {
     expect(kycReviewSchema.safeParse({ userId: USER, decision: 'reject', reason: 'ab' }).success).toBe(false);
     expect(kycReviewSchema.safeParse({ userId: USER, decision: 'reject', reason: 'Documento ilegível' }).success).toBe(true);
   });
-  it('requires a reason and a transaction hash for deposit credit', () => {
+  it('requires a reason and a non-empty reference for deposit credit', () => {
     expect(balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'deposit', amount: 100, reason: '', txHash: TX }).success).toBe(false);
     expect(balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'deposit', amount: 100, reason: 'Depósito confirmado', txHash: '' }).success).toBe(false);
     expect(balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'deposit', amount: 100, reason: 'Depósito confirmado', txHash: TX }).success).toBe(true);
+  });
+  it('accepts any text, spaces, accents and punctuation as the deposit reference', () => {
+    const result = balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'deposit', amount: 100, reason: 'Depósito confirmado', txHash: 'PIX caixa #42 / João — 15/11/2026' });
+    expect(result.success).toBe(true);
+    expect(result.success ? result.data.txHash : '').toBe('PIX caixa #42 / João — 15/11/2026');
   });
   it('allows a negative manual adjustment but never a negative deposit', () => {
     expect(balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'adjustment', amount: -25, reason: 'Correção operacional', txHash: '' }).success).toBe(true);

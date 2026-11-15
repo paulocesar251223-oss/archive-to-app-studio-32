@@ -2,6 +2,7 @@
 - [x] Replace referral links with admin-approved referral-code requests and pending status.
 - [x] Diagnose and fix admin balance adjustments; verify a signed-in adjustment end to end.
 - [x] Disable email confirmation after registration and verify signup.
+- [x] Allow any non-empty text as the admin deposit hash/reference and verify it end to end.
 - [x] Show locked padlocks on all Playboy Live Cassino thumbnails and a US$ 1,000 minimum-deposit message on selection.
 - [x] Replace all visible Obsidian branding with uppercase SOCHI, including page titles and sharing messages.
 - [ ] Replace the player-home carousel with a single ambient Lost Temple hero, transparent machine artwork, accessible play navigation, and reduced-motion support; keep other slot components available but disabled.
