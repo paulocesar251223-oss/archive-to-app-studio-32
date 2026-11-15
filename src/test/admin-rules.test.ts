@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { balanceAdjustmentSchema, kycReviewSchema, withdrawalReviewSchema } from '@/lib/admin-rules';
+import { balanceAdjustmentSchema, kycReviewSchema, referralCodeApprovalSchema, withdrawalReviewSchema } from '@/lib/admin-rules';
 
 const WALLET = 'So11111111111111111111111111111111111111112';
 const TX = '5'.repeat(88);
@@ -23,6 +23,12 @@ describe('Admin security and money rules', () => {
   it('allows a negative manual adjustment but never a negative deposit', () => {
     expect(balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'adjustment', amount: -25, reason: 'Correção operacional', txHash: '' }).success).toBe(true);
     expect(balanceAdjustmentSchema.safeParse({ userId: USER, kind: 'deposit', amount: -25, reason: 'Correção operacional', txHash: TX }).success).toBe(false);
+  });
+  it('allows admin-generated codes or a custom 8-character referral code', () => {
+    expect(referralCodeApprovalSchema.safeParse({ userId: USER, code: '' }).success).toBe(true);
+    expect(referralCodeApprovalSchema.safeParse({ userId: USER, code: 'abc12345' }).success).toBe(true);
+    expect(referralCodeApprovalSchema.safeParse({ userId: USER, code: 'SHORT' }).success).toBe(false);
+    expect(referralCodeApprovalSchema.safeParse({ userId: USER, code: 'ABC12345' }).success).toBe(true);
   });
   it('requires a transaction hash only when marking a withdrawal paid', () => {
     expect(withdrawalReviewSchema.safeParse({ withdrawalId: WITHDRAWAL, decision: 'pay', txHash: '' }).success).toBe(false);

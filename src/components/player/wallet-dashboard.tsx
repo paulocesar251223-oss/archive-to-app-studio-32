@@ -7,7 +7,7 @@ import {
   History, LoaderCircle, Settings, Share2, TriangleAlert, UserPlus,
 } from 'lucide-react';
 import { walletQuery } from '@/lib/wallet-query';
-import { requestReferralLink, requestWithdrawal } from '@/lib/wallet.functions';
+import { getReferralLink, requestWithdrawal } from '@/lib/wallet.functions';
 import { AchievementBadges, CashbackMission, ReferralCard } from './wallet-extras';
 import { withdrawalSchema, type WalletPanel } from '@/lib/wallet-rules';
 import { useI18n, type Lang } from '@/i18n';
@@ -65,7 +65,7 @@ export function WalletDashboard({ panel }: { panel: WalletPanel }) {
   const navigate = useNavigate();
   const client = useQueryClient();
   const request = useServerFn(requestWithdrawal);
-  const getReferralLink = useServerFn(requestReferralLink);
+  const getReferralLinkFn = useServerFn(getReferralLink);
   const [notice, setNotice] = useState('');
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [destination, setDestination] = useState('');
@@ -90,8 +90,9 @@ export function WalletDashboard({ panel }: { panel: WalletPanel }) {
   }
 
   async function share() {
+    if (data.profile.referral_code_status !== 'approved') { invite(); return; }
     try {
-      const { url } = await getReferralLink({});
+      const { url } = await getReferralLinkFn({});
       if (navigator.share) {
         try {
           await navigator.share({ title: t.appName, text: t.referralReward, url });
@@ -157,7 +158,7 @@ export function WalletDashboard({ panel }: { panel: WalletPanel }) {
       <div className="flex shrink-0 items-center gap-0.5">
         <Button variant="ghost" size="icon" className="sm:w-auto sm:px-3" onClick={() => void invite()} aria-label={t.invite} title={t.invite}><UserPlus /><span className="hidden sm:inline">{t.invite}</span></Button>
         <Button variant="ghost" size="icon" onClick={() => void openPanel('history')} aria-label={t.history} title={t.history}><History /></Button>
-        <Button variant="ghost" size="icon" onClick={() => void share()} aria-label={t.share} title={t.share}><Share2 /></Button>
+        {data.profile.referral_code_status === 'approved' && <Button variant="ghost" size="icon" onClick={() => void share()} aria-label={t.share} title={t.share}><Share2 /></Button>}
         <Button variant="ghost" size="icon" asChild><Link to="/settings" aria-label={t.settings} title={t.settings}><Settings /></Link></Button>
       </div>
     </header>
@@ -195,7 +196,7 @@ export function WalletDashboard({ panel }: { panel: WalletPanel }) {
       <section><h2 className="mb-4 text-sm font-semibold">{t.withdrawals}</h2>{!data.withdrawals.length ? <EmptyState title={t.noWithdrawals} description={t.noWithdrawalsText} /> : <div>{data.withdrawals.map((item) => <article key={item.id} className="border-b border-border py-4 last:border-0"><div className="flex items-start justify-between gap-3"><div><p className="font-semibold tabular-nums">{money(Number(item.amount), lang)} USDC</p><p className="mt-1 text-xs text-muted-foreground">{dateTime(item.created_at, lang)}</p></div><span className={`border px-2 py-1 text-[10px] font-medium uppercase tracking-wider ${item.status === 'paid' ? 'border-success/30 bg-success/10 text-success' : item.status === 'rejected' ? 'border-destructive/30 text-destructive' : 'border-border text-muted-foreground'}`}>{t.withdrawalStatus[item.status]}</span></div><p className="mt-3 font-mono text-xs text-muted-foreground" title={item.destination_address}>{shortAddress(item.destination_address)}</p>{item.rejection_reason && <p className="mt-2 text-xs text-destructive">{item.rejection_reason}</p>}{item.tx_hash && <p className="mt-2 truncate font-mono text-[10px] text-muted-foreground" title={item.tx_hash}>{item.tx_hash}</p>}</article>)}</div>}</section>
     </div></Panel>}
 
-    <ReferralCard />
+    <ReferralCard status={data.profile.referral_code_status} />
     <AchievementBadges achievements={data.achievements} />
   </div>;
 }

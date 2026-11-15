@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import type { Database, Json } from '@/integrations/supabase/types';
 import {
   achievementSchema, balanceAdjustmentSchema, gameSettingsSchema, kycReviewSchema,
-  missionTermsSchema, playerDetailsSchema, playerListSchema, reportRangeSchema,
+  missionTermsSchema, playerDetailsSchema, playerListSchema, referralCodeApprovalSchema, reportRangeSchema,
   telegramRelinkSchema, userBlockSchema, withdrawalListSchema, withdrawalReviewSchema,
   type StaffRole,
 } from './admin-rules';
@@ -164,6 +164,7 @@ export const getAdminPlayer = createServerFn({ method: 'POST' }).middleware([req
     return {
       profile, balance, deposits, withdrawals, achievements: achievements ?? [], referrals: referrals ?? [], relatedProfiles,
       bets: bets ?? [], betTotal: betTotal ?? 0, betPage: data.betPage, betPageSize: 20, canManageMoney,
+      canManageReferralCodes: roles.includes('admin'),
     };
   });
 
@@ -177,6 +178,17 @@ export const adjustPlayerBalance = createServerFn({ method: 'POST' }).middleware
     });
     if (error) throwDb(error);
     return { ok: true, ledgerId: id };
+  });
+
+export const setReferralCode = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
+  .inputValidator((input) => referralCodeApprovalSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await requireRoles(context.supabase, context.userId, context.claims.aal, ADMIN);
+    const { data: code, error } = await context.supabase.rpc('admin_set_referral_code', {
+      _user_id: data.userId, ...(data.code ? { _code: data.code } : {}),
+    });
+    if (error) throwDb(error);
+    return { ok: true, code };
   });
 
 export const listAdminWithdrawals = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])

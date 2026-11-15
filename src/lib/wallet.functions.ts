@@ -8,7 +8,7 @@ function throwDb(error: { message: string } | null): never {
 
 export const getWallet = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const [profile, balance, ledger, withdrawals, unlocked, catalog, excluded, mission, settings, referrals] = await Promise.all([
-    context.supabase.from('profiles').select('full_name,email,referral_code,solana_wallet_address').eq('user_id', context.userId).maybeSingle(),
+    context.supabase.from('profiles').select('full_name,email,referral_code,referral_code_status,referral_requested_at,solana_wallet_address').eq('user_id', context.userId).maybeSingle(),
     context.supabase.rpc('get_balance', { _user_id: context.userId }),
     context.supabase.from('ledger').select('id,type,amount,reason,tx_hash,created_at').eq('user_id', context.userId).order('created_at', { ascending: false }).limit(100),
     context.supabase.from('withdrawals').select('id,amount,destination_address,status,tx_hash,rejection_reason,created_at,updated_at').eq('user_id', context.userId).order('created_at', { ascending: false }).limit(100),
@@ -44,7 +44,11 @@ export const getWallet = createServerFn({ method: 'POST' }).middleware([requireS
   })).sort((a, b) => a.sequence - b.sequence);
 
   return {
-    profile: profile.data,
+    profile: {
+      ...profile.data,
+      referral_code: profile.data.referral_code_status === 'approved' ? profile.data.referral_code : null,
+      referral_code_status: profile.data.referral_code_status as 'not_requested' | 'pending' | 'approved',
+    },
     balance: Number(balance.data ?? 0),
     ledger: ledger.data ?? [],
     withdrawals: withdrawals.data ?? [],
@@ -81,10 +85,17 @@ export const getWallet = createServerFn({ method: 'POST' }).middleware([requireS
   };
 });
 
-export const requestReferralLink = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
-  const { data: profile, error } = await context.supabase.from('profiles').select('referral_code').eq('user_id', context.userId).maybeSingle();
+export const requestReferralCode = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { data: status, error } = await context.supabase.rpc('request_referral_code');
+  if (error) throwDb(error);
+  return { status };
+});
+
+export const getReferralLink = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { data: profile, error } = await context.supabase.from('profiles').select('referral_code,referral_code_status').eq('user_id', context.userId).maybeSingle();
   if (error) throwDb(error);
   if (!profile) throw new Error('PROFILE_NOT_FOUND');
+  if (profile.referral_code_status !== 'approved') throw new Error('REFERRAL_CODE_PENDING');
   const token = process.env['TELEGRAM_BOT_TOKEN'];
   if (!token) throw new Error('TELEGRAM_BOT_UNAVAILABLE');
   const response = await fetch(`https://api.telegram.org/bot${token}/getMe`, { signal: AbortSignal.timeout(10_000) });

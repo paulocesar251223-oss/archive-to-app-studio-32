@@ -32,7 +32,7 @@ export function AuthScreen({ mode = 'login', initialReferral = '' }: { mode?: 'l
       } else if (mode === 'register') {
         const { data, error } = await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: window.location.origin, data: { referral_code: referral.trim().toUpperCase() || undefined, language: lang } } });
         if (error) throw error;
-        if (data.session) await navigate({ to: '/dashboard' }); else setMessage(t.checkEmail);
+        if (data.user) await goAfterLogin(data.user.id); else setError(t.genericError);
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) throw error;

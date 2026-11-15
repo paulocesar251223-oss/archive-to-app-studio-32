@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { useServerFn } from '@tanstack/react-start';
-import { ArrowRight, Check, CircleDollarSign, Copy, Crown, Flame, Gift, LockKeyhole, Sparkles, Trophy, UserPlus } from 'lucide-react';
-import { requestReferralLink } from '@/lib/wallet.functions';
+import { useQueryClient } from '@tanstack/react-query';
+import { ArrowRight, Check, CircleDollarSign, Clock3, Copy, Crown, Flame, Gift, LockKeyhole, Sparkles, Trophy, UserPlus } from 'lucide-react';
+import { getReferralLink, requestReferralCode } from '@/lib/wallet.functions';
 import { CASHBACK_INSTALLMENT_AMOUNT, CASHBACK_INSTALLMENTS, CASHBACK_TOTAL, cashbackReleased, countdownLabel, currentCashbackSequence, type CashbackInstallment } from '@/lib/cashback-rules';
 import { useI18n, type Lang } from '@/i18n';
 import { Button } from '@/components/ui/button';
@@ -87,9 +88,14 @@ export function CashbackMission({ mission, terms }: { mission: Mission; terms: M
   </>;
 }
 
-export function ReferralCard() {
+type ReferralStatus = 'not_requested' | 'pending' | 'approved';
+
+export function ReferralCard({ status: initialStatus }: { status: ReferralStatus }) {
   const { t } = useI18n();
-  const request = useServerFn(requestReferralLink);
+  const client = useQueryClient();
+  const requestCode = useServerFn(requestReferralCode);
+  const getLink = useServerFn(getReferralLink);
+  const [status, setStatus] = useState<ReferralStatus>(initialStatus);
   const [url, setUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
@@ -99,8 +105,14 @@ export function ReferralCard() {
     setBusy(true);
     setError(false);
     try {
-      const result = await request({});
-      setUrl(result.url);
+      if (status === 'not_requested') {
+        const result = await requestCode({});
+        setStatus(result.status as ReferralStatus);
+        await client.invalidateQueries({ queryKey: ['wallet'] });
+      } else if (status === 'approved') {
+        const result = await getLink({});
+        setUrl(result.url);
+      }
     } catch {
       setError(true);
     } finally {
@@ -116,7 +128,7 @@ export function ReferralCard() {
 
   return <section id="referral" className="mt-8 border border-border bg-card p-5">
     <div className="flex items-start gap-3"><UserPlus className="mt-0.5 size-5 shrink-0 text-success" /><div><h2 className="font-semibold">{t.referralTitle}</h2><p className="mt-1 text-sm font-medium text-success">{t.referralReward}</p><p className="mt-2 text-xs leading-5 text-muted-foreground">{t.referralProtection}</p></div></div>
-    {url ? <div className="mt-4"><div className="flex items-center gap-2"><code className="min-w-0 flex-1 truncate border border-border bg-background p-3 text-xs">{url}</code><Button variant="outline" size="icon" onClick={() => void copy()} aria-label={t.copy}><Copy /></Button></div>{copied && <p role="status" className="mt-2 text-xs text-success">{t.referralCopied}</p>}</div> : <Button variant="outline" className="mt-4 w-full" disabled={busy} onClick={() => void generate()}>{busy ? t.loading : t.requestReferralLink}</Button>}
+    {status === 'pending' ? <div role="status" className="mt-4 flex items-center justify-center gap-2 border border-border bg-background p-3 text-sm text-muted-foreground"><Clock3 className="size-4" />{t.referralPending}</div> : url ? <div className="mt-4"><div className="flex items-center gap-2"><code className="min-w-0 flex-1 truncate border border-border bg-background p-3 text-xs">{url}</code><Button variant="outline" size="icon" onClick={() => void copy()} aria-label={t.copy}><Copy /></Button></div>{copied && <p role="status" className="mt-2 text-xs text-success">{t.referralCopied}</p>}</div> : <Button variant="outline" className="mt-4 w-full" disabled={busy} onClick={() => void generate()}>{busy ? t.loading : status === 'approved' ? t.viewReferralLink : t.requestReferralCode}</Button>}
     {error && <p role="alert" className="mt-3 text-xs text-destructive">{t.referralError}</p>}
   </section>;
 }

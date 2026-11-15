@@ -36,6 +36,10 @@ export const balanceAdjustmentSchema = z.object({
   if (value.kind === 'deposit' && (!value.txHash || !SOLANA_TX_PATTERN.test(value.txHash))) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'VALID_TX_HASH_REQUIRED' });
   if (value.kind === 'adjustment' && value.txHash) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'TX_HASH_ONLY_FOR_DEPOSIT' });
 });
+export const referralCodeApprovalSchema = z.object({
+  userId: uuid,
+  code: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{8}$/, 'INVALID_REFERRAL_CODE').optional().or(z.literal('')),
+});
 export const playerDetailsSchema = z.object({
   userId: uuid,
   betPage: z.number().int().min(1).default(1),
@@ -88,12 +92,15 @@ const ERROR_MESSAGES: Record<string, string> = {
   TX_HASH_ONLY_FOR_DEPOSIT: 'O hash só deve ser informado em créditos de depósito.',
   DEPOSIT_MUST_BE_POSITIVE: 'O depósito deve ter valor positivo.',
   INVALID_AMOUNT: 'Informe um valor válido.',
+  INVALID_REFERRAL_CODE: 'Use um código de 8 letras ou números, ou deixe vazio para gerar automaticamente.',
+  PROFILE_NOT_FOUND: 'Jogador não encontrado.',
   KYC_NOT_PENDING: 'Este KYC já foi analisado ou ainda não foi enviado.',
   INVALID_WITHDRAWAL_STATUS: 'O saque mudou de status. Atualize a lista.',
   INSUFFICIENT_BALANCE: 'Saldo insuficiente para esta operação.',
 };
 export function adminErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
+  if (/profiles_referral_code_key/i.test(message)) return 'Este código de indicação já está em uso.';
   if (/duplicate key|ledger_tx_hash_unique|withdrawals_tx_hash_unique/i.test(message)) return 'Esta transação já foi utilizada.';
   if (/Insufficient balance/i.test(message)) return ERROR_MESSAGES['INSUFFICIENT_BALANCE']!;
   const code = Object.keys(ERROR_MESSAGES).find((key) => message.includes(key));

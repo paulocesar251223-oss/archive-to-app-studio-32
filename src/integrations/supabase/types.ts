@@ -436,6 +436,10 @@ export type Database = {
           language: Database["public"]["Enums"]["app_language"]
           nationality: string | null
           referral_code: string
+          referral_code_approved_at: string | null
+          referral_code_approved_by: string | null
+          referral_code_status: string
+          referral_requested_at: string | null
           referred_by: string | null
           rejection_reason: string | null
           solana_wallet_address: string | null
@@ -458,6 +462,10 @@ export type Database = {
           language?: Database["public"]["Enums"]["app_language"]
           nationality?: string | null
           referral_code: string
+          referral_code_approved_at?: string | null
+          referral_code_approved_by?: string | null
+          referral_code_status?: string
+          referral_requested_at?: string | null
           referred_by?: string | null
           rejection_reason?: string | null
           solana_wallet_address?: string | null
@@ -480,6 +488,10 @@ export type Database = {
           language?: Database["public"]["Enums"]["app_language"]
           nationality?: string | null
           referral_code?: string
+          referral_code_approved_at?: string | null
+          referral_code_approved_by?: string | null
+          referral_code_status?: string
+          referral_requested_at?: string | null
           referred_by?: string | null
           rejection_reason?: string | null
           solana_wallet_address?: string | null
@@ -863,6 +875,10 @@ export type Database = {
         Args: { _terms: string; _version: number }
         Returns: undefined
       }
+      admin_set_referral_code: {
+        Args: { _code?: string; _user_id: string }
+        Returns: string
+      }
       admin_set_user_blocked: {
         Args: { _blocked: boolean; _reason?: string; _user_id: string }
         Returns: undefined
@@ -921,6 +937,7 @@ export type Database = {
         Returns: number
       }
       release_cashback_installments: { Args: never; Returns: number }
+      request_referral_code: { Args: never; Returns: string }
       request_withdrawal: {
         Args: { _amount: number; _destination_address: string }
         Returns: string
