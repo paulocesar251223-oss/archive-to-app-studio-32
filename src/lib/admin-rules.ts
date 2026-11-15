@@ -33,7 +33,6 @@ export const balanceAdjustmentSchema = z.object({
   txHash: z.string().trim().max(200).optional().or(z.literal('')),
 }).superRefine((value, ctx) => {
   if (value.kind === 'deposit' && value.amount <= 0) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'DEPOSIT_MUST_BE_POSITIVE' });
-  if (value.kind === 'deposit' && !value.txHash) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'DEPOSIT_REFERENCE_REQUIRED' });
   if (value.kind === 'adjustment' && value.txHash) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'TX_HASH_ONLY_FOR_DEPOSIT' });
 });
 export const referralCodeApprovalSchema = z.object({
@@ -89,7 +88,6 @@ const ERROR_MESSAGES: Record<string, string> = {
   REASON_REQUIRED: 'Informe um motivo com pelo menos 3 caracteres.',
   INVALID_SOLANA_WALLET: 'Informe um endereço Solana válido.',
   VALID_TX_HASH_REQUIRED: 'Informe uma assinatura de transação Solana válida.',
-  DEPOSIT_REFERENCE_REQUIRED: 'Informe um hash ou qualquer identificação para o depósito.',
   TX_HASH_ONLY_FOR_DEPOSIT: 'O hash só deve ser informado em créditos de depósito.',
   DEPOSIT_MUST_BE_POSITIVE: 'O depósito deve ter valor positivo.',
   INVALID_AMOUNT: 'Informe um valor válido.',

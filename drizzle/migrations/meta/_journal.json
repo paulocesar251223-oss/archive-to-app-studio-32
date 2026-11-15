@@ -8,6 +8,13 @@
       "when": 1794752007330,
       "tag": "0000_add_referral_code_approval",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794752654226,
+      "tag": "0001_make_deposit_hash_optional",
+      "breakpoints": true
     }
   ]
 }
