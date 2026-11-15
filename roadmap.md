@@ -28,5 +28,5 @@
 # Migration to this project
 - [x] Copy app code and rebuild the database, ID photo storage and daily cashback job.
 - [ ] Import existing players and records: blocked on CSV/JSON exports from the old project.
-- [ ] Telegram linking: blocked on the Telegram bot token.
-- [ ] Assign first staff (admin) account: blocked on the owner signing up.
+- [x] Telegram bot token saved (linking needs a real Telegram mini-app check).
+- [x] Admin and approved player accounts created.
