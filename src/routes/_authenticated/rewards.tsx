@@ -15,7 +15,7 @@ const liveGames = [
 ];
 
 export const Route = createFileRoute('/_authenticated/rewards')({
-  head: () => pageHead('Playboy Live Casino', 'Playboy Live Casino at Obsidian Slots.'),
+  head: () => pageHead('Playboy Live Cassino', 'Playboy Live Cassino at Obsidian Slots.'),
   loader: ({ context }) => context.queryClient.ensureQueryData(accountQuery),
   component: Rewards,
 });
