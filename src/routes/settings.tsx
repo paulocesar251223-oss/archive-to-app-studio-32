@@ -12,7 +12,7 @@ import { linkTelegram } from '@/lib/telegram.functions';
 import { pageHead } from '@/lib/metadata';
 import { accountQuery } from '@/lib/account-query';
 import { PlayerSettings } from '@/components/player/player-settings';
-export const Route = createFileRoute('/settings')({ head: () => pageHead('Settings', 'Manage language and Telegram preferences for Obsidian Slots.'), component: Settings });
+export const Route = createFileRoute('/settings')({ head: () => pageHead('Settings', 'Manage language and Telegram preferences for SOCHI Slots.'), component: Settings });
 function Settings() {
   const profile = useQuery({ ...accountQuery, retry: false });
   const { t, lang, setLang } = useI18n(); const client = useQueryClient(); const navigate = useNavigate(); const save = useServerFn(saveLanguage); const link = useServerFn(linkTelegram); const [busy, setBusy] = useState(false); const [message, setMessage] = useState('');

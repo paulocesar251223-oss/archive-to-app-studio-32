@@ -5,7 +5,7 @@ import { slots } from '@/lib/slots';
 import { pageHead } from '@/lib/metadata';
 import { SlotGame } from '@/components/player/slot-game';
 export const Route = createFileRoute('/_authenticated/game/$gameId')({
-  head: ({ params }) => pageHead(slots.find(s => s.id === params.gameId)?.name ?? 'Game', 'Obsidian Slots full-screen game.'),
+  head: ({ params }) => pageHead(slots.find(s => s.id === params.gameId)?.name ?? 'Game', 'SOCHI Slots full-screen game.'),
   loader: async ({ params, context }) => {
     if (!slots.some(s => s.id === params.gameId)) throw notFound();
     await Promise.all([checkGameAccess(), context.queryClient.ensureQueryData(accountQuery)]);

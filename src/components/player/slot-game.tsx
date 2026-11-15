@@ -64,7 +64,7 @@ export function SlotGame({ gameId, gameName }: { gameId: string; gameName: strin
   const reduceMotionPreference = useReducedMotion();
   const reduceMotion = Boolean(reduceMotionPreference);
   const [session, setSession] = useState<Session | null>(null);
-  const [clientSeed, setClientSeed] = useState('obsidian-player');
+  const [clientSeed, setClientSeed] = useState('SOCHI-player');
   const [balance, setBalance] = useState(account.balance);
   const [bet, setBet] = useState(1);
   const [spins, setSpins] = useState<1 | 10 | 100>(1);
@@ -90,7 +90,7 @@ export function SlotGame({ gameId, gameName }: { gameId: string; gameName: strin
     let active = true;
     setSession(null);
     setError('');
-    void prepare({ data: { game: gameId, clientSeed: 'obsidian-player' } }).then((result) => {
+    void prepare({ data: { game: gameId, clientSeed: 'SOCHI-player' } }).then((result) => {
       if (active) setSession(result);
     }).catch(() => {
       if (active) setError(t.spinSessionError);
@@ -236,7 +236,7 @@ export function SlotGame({ gameId, gameName }: { gameId: string; gameName: strin
   const lineName = (line: PaylineId) => line === 'middle' ? t.middleLine : line === 'diagonalDown' ? t.diagonalDown : t.diagonalUp;
 
   return <main className="min-h-dvh bg-background pb-60 text-foreground">
-    <header className="relative z-30 flex items-center justify-between px-3 py-3"><Button variant="ghost" size="icon" className="text-gold" asChild><Link to="/dashboard" aria-label={t.backHome}><ArrowLeft /></Link></Button><div className="text-center"><p className="text-[9px] uppercase tracking-[0.25em] text-gold">Obsidian Slots</p><h1 className="mt-1 font-serif text-lg font-semibold text-gold">{gameName}</h1></div><Button variant="ghost" size="icon" className="text-gold" onClick={toggleSound} aria-label={muted ? t.enableSound : t.muteSound}>{muted ? <VolumeX /> : <Volume2 />}</Button></header>
+    <header className="relative z-30 flex items-center justify-between px-3 py-3"><Button variant="ghost" size="icon" className="text-gold" asChild><Link to="/dashboard" aria-label={t.backHome}><ArrowLeft /></Link></Button><div className="text-center"><p className="text-[9px] uppercase tracking-[0.25em] text-gold">SOCHI Slots</p><h1 className="mt-1 font-serif text-lg font-semibold text-gold">{gameName}</h1></div><Button variant="ghost" size="icon" className="text-gold" onClick={toggleSound} aria-label={muted ? t.enableSound : t.muteSound}>{muted ? <VolumeX /> : <Volume2 />}</Button></header>
 
     <section className="temple-machine relative mx-auto w-full max-w-[520px] select-none" aria-label={gameName}>
       <img src={templeArt} alt="Lost Temple golden Egyptian slot machine" className="block h-auto w-full" draggable={false} />

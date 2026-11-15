@@ -6,7 +6,7 @@ import { WalletDashboard } from '@/components/player/wallet-dashboard';
 import { pageHead } from '@/lib/metadata';
 
 export const Route = createFileRoute('/_authenticated/wallet')({
-  head: () => pageHead('Wallet & profile', 'Your Obsidian Slots balance, USDC deposits, withdrawals, history and achievements.'),
+  head: () => pageHead('Wallet & profile', 'Your SOCHI Slots balance, USDC deposits, withdrawals, history and achievements.'),
   validateSearch: (search: Record<string, unknown>): { tab?: WalletPanel } => WALLET_PANELS.includes(search['tab'] as WalletPanel) ? { tab: search['tab'] as WalletPanel } : {},
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData(walletQuery);

@@ -75,7 +75,7 @@ export function LostTempleHero() {
 
       <div className="temple-hero-content">
         <div className="temple-hero-heading">
-          <p>OBSIDIAN SLOTS</p>
+          <p>SOCHI SLOTS</p>
           <h1 id="temple-hero-title">{game.name}</h1>
           <span>{t[game.category]}</span>
         </div>

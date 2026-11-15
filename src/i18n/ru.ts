@@ -1,7 +1,7 @@
 import type { Dict } from "./en";
 export const ru: Dict = {
-  games: 'Игры', play: 'Играть', walletProfile: 'Кошелёк / Профиль', centerTab: 'Playboy Live Cassino', navigation: 'Навигация', previousGame: 'Предыдущая игра', nextGame: 'Следующая игра', templeCategory: 'Сокровища и приключения', jungleCategory: 'Дикая природа', crystalCategory: 'Мир самоцветов', deposit: 'Депозит', depositLimits: 'Лимиты депозитов', daily: 'День', weekly: 'Неделя', monthly: 'Месяц', saveLimits: 'Сохранить лимиты', saved: 'Сохранено', noLimit: 'Не задан', limitNote: 'Лимиты действуют сразу. 0 запрещает депозиты за период. Периоды сбрасываются по UTC.', selfExclusion: 'Самоисключение', exclusionNote: 'Приостановить доступ к играм и депозитам. Отменить до окончания срока нельзя.', oneDay: '24 часа', sevenDays: '7 дней', thirtyDays: '30 дней', permanent: 'Навсегда', confirmExclusion: 'Подтвердить самоисключение', cancel: 'Отмена', excludedTitle: 'Самоисключение активно', excludedText: 'Игры и депозиты недоступны во время самоисключения.', profileStatus: 'Статус', approved: 'Подтверждён', gameUnavailable: 'Игра скоро появится', closeGame: 'Назад к играм', exclusionWarning: 'Доступ к играм и депозитам будет закрыт на выбранный срок. Постоянное самоисключение бессрочно.',
-  appName: "Obsidian Slots",
+  games: 'Игры', play: 'Играть', walletProfile: 'Кошелёк / Профиль', centerTab: 'Playboy Live Cassino', liveGameLocked: 'Live-игра заблокирована', liveGameDepositMinimum: 'Для разблокировки игр live-казино требуется минимальный депозит US$ 1 000.', navigation: 'Навигация', previousGame: 'Предыдущая игра', nextGame: 'Следующая игра', templeCategory: 'Сокровища и приключения', jungleCategory: 'Дикая природа', crystalCategory: 'Мир самоцветов', deposit: 'Депозит', depositLimits: 'Лимиты депозитов', daily: 'День', weekly: 'Неделя', monthly: 'Месяц', saveLimits: 'Сохранить лимиты', saved: 'Сохранено', noLimit: 'Не задан', limitNote: 'Лимиты действуют сразу. 0 запрещает депозиты за период. Периоды сбрасываются по UTC.', selfExclusion: 'Самоисключение', exclusionNote: 'Приостановить доступ к играм и депозитам. Отменить до окончания срока нельзя.', oneDay: '24 часа', sevenDays: '7 дней', thirtyDays: '30 дней', permanent: 'Навсегда', confirmExclusion: 'Подтвердить самоисключение', cancel: 'Отмена', excludedTitle: 'Самоисключение активно', excludedText: 'Игры и депозиты недоступны во время самоисключения.', profileStatus: 'Статус', approved: 'Подтверждён', gameUnavailable: 'Игра скоро появится', closeGame: 'Назад к играм', exclusionWarning: 'Доступ к играм и депозитам будет закрыт на выбранный срок. Постоянное самоисключение бессрочно.',
+  appName: "SOCHI Slots",
   tagline: "Премиальные слоты в вашем Telegram",
   login: "Войти",
   register: "Создать аккаунт",
@@ -72,7 +72,7 @@ export const ru: Dict = {
   share: 'Поделиться',
   copied: 'Скопировано',
   referralCopied: 'Реферальная ссылка скопирована.',
-  shareText: 'Присоединяйся ко мне в Obsidian Slots.',
+  shareText: 'Присоединяйся ко мне в SOCHI Slots.',
   totalBalance: 'Общий баланс',
   withdraw: 'Вывести',
   deposits: 'Депозиты',

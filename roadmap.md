@@ -1,4 +1,6 @@
 # Implementation
+- [x] Show locked padlocks on all Playboy Live Cassino thumbnails and a US$ 1,000 minimum-deposit message on selection.
+- [x] Replace all visible Obsidian branding with uppercase SOCHI, including page titles and sharing messages.
 - [ ] Replace the player-home carousel with a single ambient Lost Temple hero, transparent machine artwork, accessible play navigation, and reduced-motion support; keep other slot components available but disabled.
 - [x] Added an audited US$ 200 test adjustment to rei.investe@gmail.com and verified it in the player wallet with a real spin.
 - [x] Rebuild Lost Temple around its carousel artwork with 3×3 reels, central/diagonal server-paid lines, illustrated symbols, gold presentation, sequential reels, win effects, sound controls, and existing bottom controls.

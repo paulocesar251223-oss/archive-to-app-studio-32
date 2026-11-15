@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useI18n } from '@/i18n';
 import { passwordSchema } from '@/lib/account-rules';
 import { pageHead } from '@/lib/metadata';
-export const Route = createFileRoute('/reset-password')({ head: () => pageHead('Reset password', 'Set a new password for your Obsidian Slots account.'), component: ResetPassword });
+export const Route = createFileRoute('/reset-password')({ head: () => pageHead('Reset password', 'Set a new password for your SOCHI Slots account.'), component: ResetPassword });
 function ResetPassword() {
   const { t } = useI18n(); const [valid, setValid] = useState(false); const [password, setPassword] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [done, setDone] = useState(false);
   useEffect(() => { const recovery = new URLSearchParams(window.location.hash.slice(1)).get('type') === 'recovery' || sessionStorage.getItem('password_recovery') === '1'; supabase.auth.getUser().then(({ data }) => setValid(recovery && Boolean(data.user))); }, []);

@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { adminErrorMessage } from '@/lib/admin-rules';
 
 export function PageHeader({ eyebrow, title, description, action }: { eyebrow?: string; title: string; description: string; action?: ReactNode }) {
-  return <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{eyebrow ?? 'Obsidian Operations'}</p><h1 className="text-3xl font-semibold tracking-tight">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p></div>{action}</div>;
+  return <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{eyebrow ?? 'SOCHI Operations'}</p><h1 className="text-3xl font-semibold tracking-tight">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p></div>{action}</div>;
 }
 export function StatCard({ label, value, detail }: { label: string; value: string | number; detail?: string }) {
   return <Card className="rounded-none border-border bg-card shadow-none"><CardContent className="p-5"><p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{label}</p><p className="mt-3 font-mono text-3xl font-semibold tabular-nums">{value}</p>{detail && <p className="mt-2 text-xs text-muted-foreground">{detail}</p>}</CardContent></Card>;

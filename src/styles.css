@@ -203,8 +203,15 @@ button, a, input { -webkit-tap-highlight-color: transparent; }
 .live-casino { padding: 26px 16px 30px; }
 .live-casino h1 { margin-bottom: 20px; font-size: 24px; font-weight: 650; line-height: 1.2; letter-spacing: -.025em; }
 .live-casino-list { display: grid; gap: 16px; }
-.live-casino-card { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); box-shadow: 0 12px 28px color-mix(in oklch, var(--foreground) 8%, transparent); }
+.live-casino-card { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); box-shadow: 0 12px 28px color-mix(in oklch, var(--foreground) 8%, transparent); cursor: pointer; }
+.live-casino-card:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
 .live-casino-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.live-casino-lock { position: absolute; inset: 0; display: grid; place-items: center; background: color-mix(in oklch, var(--background) 45%, transparent); }
+.live-casino-lock-badge, .live-casino-dialog-icon { display: grid; place-items: center; border: 1px solid color-mix(in oklch, var(--gold) 65%, var(--border)); border-radius: 999px; background: color-mix(in oklch, var(--background) 82%, transparent); color: var(--gold); box-shadow: 0 8px 24px color-mix(in oklch, var(--foreground) 18%, transparent); backdrop-filter: blur(8px); }
+.live-casino-lock-badge { width: 64px; height: 64px; transition: transform 180ms ease; }
+.live-casino-card:hover .live-casino-lock-badge { transform: scale(1.06); }
+.live-casino-dialog-icon { width: 56px; height: 56px; margin: 0 auto 8px; }
+@media (prefers-reduced-motion: reduce) { .live-casino-lock-badge { transition: none; } }
 @media (min-width: 640px) { .live-casino { padding: 36px 24px 44px; } .live-casino h1 { margin-bottom: 24px; font-size: 30px; } .live-casino-list { gap: 22px; } }
 .slot-home { padding-top: 26px; overflow: hidden; }
 .slot-stage { position: relative; height: 350px; perspective: 1000px; touch-action: pan-y; user-select: none; }

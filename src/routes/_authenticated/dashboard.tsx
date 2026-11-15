@@ -13,7 +13,7 @@ import { PlayerShell } from '@/components/player/player-shell';
 import { LostTempleHero } from '@/components/player/lost-temple-hero';
 import { playerSafetyQuery } from '@/lib/player-query';
 function PlayerHome() { const { data } = useSuspenseQuery(playerSafetyQuery); const { t } = useI18n(); return <PlayerShell>{data.excluded ? <div className="px-6 py-20 text-center"><ShieldAlert className="mx-auto mb-5 size-10"/><h1 className="text-2xl font-semibold">{t.excludedTitle}</h1><p className="mt-4 text-muted-foreground">{t.excludedText}</p></div> : <LostTempleHero/>}</PlayerShell>; }
-export const Route = createFileRoute('/_authenticated/dashboard')({ head: () => pageHead('Your account', 'Your Obsidian Slots account and identity verification status.'), loader: ({ context }) => context.queryClient.ensureQueryData(accountQuery), component: Dashboard });
+export const Route = createFileRoute('/_authenticated/dashboard')({ head: () => pageHead('Your account', 'Your SOCHI Slots account and identity verification status.'), loader: ({ context }) => context.queryClient.ensureQueryData(accountQuery), component: Dashboard });
 function Dashboard() {
   const { data } = useSuspenseQuery(accountQuery); const { t } = useI18n(); const [resubmit, setResubmit] = useState(false); const view = accountView(data.profile);
   if (view === 'home') return <PlayerHome/>;
