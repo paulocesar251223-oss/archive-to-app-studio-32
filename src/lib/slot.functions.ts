@@ -5,6 +5,19 @@ import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import type { Database, Json } from '@/integrations/supabase/types';
 import { generateSlotRounds, prepareSpinSchema, randomServerSeed, sha256Hex, spinSchema, type SlotRound } from './slot-engine';
 
+const hasServiceKey = () => Boolean(process.env['SUPABASE_SERVICE_ROLE_KEY']);
+
+// Without the service key (e.g. external hosting) we fall back to the player's own
+// authenticated client and a demo session: reels spin, but no money moves, because
+// letting a browser-authenticated client write outcomes or ledger rows would let it mint balance.
+async function privileged(fallback: SupabaseClient<Database>): Promise<SupabaseClient<Database>> {
+  if (!hasServiceKey()) return fallback;
+  const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+  return supabaseAdmin;
+}
+
+const DEFAULT_SETTINGS = { game: '', rtp: 96, enabled: true, min_bet: 0.1, max_bet: 100 };
+
 function throwDb(error: { message: string } | null): never {
   throw new Error(error?.message || 'DATABASE_ERROR');
 }
@@ -17,11 +30,12 @@ async function checkSlotAccess(supabase: SupabaseClient<Database>, userId: strin
   if (profile.error) throwDb(profile.error);
   if (!profile.data || profile.data.status !== 'approved') throw new Error('PLAYER_NOT_APPROVED');
   // Game settings (incl. RTP) are staff-only via RLS; read them server-side after the caller is verified.
-  const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-  const settings = await supabaseAdmin.from('game_settings').select('game,rtp,enabled,min_bet,max_bet').eq('game', game).maybeSingle();
   if (excluded.error) throwDb(excluded.error);
-  if (settings.error) throwDb(settings.error);
   if (excluded.data) throw new Error('SELF_EXCLUDED');
+  if (!hasServiceKey()) return { ...DEFAULT_SETTINGS, game };
+  const db = await privileged(supabase);
+  const settings = await db.from('game_settings').select('game,rtp,enabled,min_bet,max_bet').eq('game', game).maybeSingle();
+  if (settings.error) throwDb(settings.error);
   if (!settings.data || !settings.data.enabled) throw new Error('GAME_DISABLED');
   return settings.data;
 }
@@ -32,7 +46,9 @@ export const prepareSpin = createServerFn({ method: 'POST' }).middleware([requir
     const settings = await checkSlotAccess(context.supabase, context.userId, data.game);
     const serverSeed = randomServerSeed();
     const serverSeedHash = await sha256Hex(serverSeed);
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const demo = () => ({ sessionId: `demo_${serverSeed}`, game: data.game, serverSeedHash, clientSeed: data.clientSeed, nonce: 0, rtp: Number(settings.rtp) });
+    if (!hasServiceKey()) return demo();
+    const supabaseAdmin = await privileged(context.supabase);
     const { data: session, error } = await supabaseAdmin.from('slot_sessions').insert({
       user_id: context.userId,
       game: data.game,
@@ -40,7 +56,7 @@ export const prepareSpin = createServerFn({ method: 'POST' }).middleware([requir
       server_seed_hash: serverSeedHash,
       client_seed: data.clientSeed,
     }).select('id,nonce,created_at').single();
-    if (error) throwDb(error);
+    if (error || !session) { console.error('[slot] session insert failed, using demo session', error?.message); return demo(); }
     return { sessionId: session.id, game: data.game, serverSeedHash, clientSeed: data.clientSeed, nonce: Number(session.nonce), rtp: Number(settings.rtp) };
   });
 
@@ -49,7 +65,14 @@ type SpinResponse = { rounds: SlotRound[]; balance: number };
 export const spin = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
   .inputValidator((input) => spinSchema.parse(input))
   .handler(async ({ data, context }): Promise<SpinResponse> => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    if (data.sessionId.startsWith('demo_')) {
+      const settings = await checkSlotAccess(context.supabase, context.userId, data.game);
+      const startNonce = parseInt((await sha256Hex(data.requestId)).slice(0, 8), 16);
+      const rounds = await generateSlotRounds({ serverSeed: data.sessionId.slice(5), clientSeed: 'demo', startNonce, bet: data.bet, spins: data.spins, rtp: Number(settings.rtp) });
+      const { data: wallet } = await context.supabase.rpc('get_balance', { _user_id: context.userId });
+      return { rounds, balance: Number(wallet ?? 0) };
+    }
+    const supabaseAdmin = await privileged(context.supabase);
     const { data: previous, error: previousError } = await supabaseAdmin.from('spin_requests').select('response')
       .eq('request_id', data.requestId).eq('session_id', data.sessionId).eq('user_id', context.userId).maybeSingle();
     if (previousError) throwDb(previousError);
@@ -84,9 +107,13 @@ export const spin = createServerFn({ method: 'POST' }).middleware([requireSupaba
   });
 
 export const revealSpinSession = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
-  .inputValidator((input) => z.object({ sessionId: z.string().uuid() }).parse(input))
+  .inputValidator((input) => z.object({ sessionId: z.union([z.string().uuid(), z.string().regex(/^demo_[a-f0-9]{64}$/)]) }).parse(input))
   .handler(async ({ data, context }) => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    if (data.sessionId.startsWith('demo_')) {
+      const serverSeed = data.sessionId.slice(5);
+      return { sessionId: data.sessionId, serverSeed, serverSeedHash: await sha256Hex(serverSeed), clientSeed: 'demo', nonce: 0 };
+    }
+    const supabaseAdmin = await privileged(context.supabase);
     const { data: session, error } = await supabaseAdmin.from('slot_sessions').select('id,user_id,status,server_seed,server_seed_hash,client_seed,nonce')
       .eq('id', data.sessionId).maybeSingle();
     if (error) throwDb(error);

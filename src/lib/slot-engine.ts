@@ -24,7 +24,7 @@ export const prepareSpinSchema = z.object({
   clientSeed: clientSeedSchema,
 });
 export const spinSchema = z.object({
-  sessionId: z.string().uuid(),
+  sessionId: z.union([z.string().uuid(), z.string().regex(/^demo_[a-f0-9]{64}$/)]),
   requestId: z.string().uuid(),
   game: z.string().trim().regex(/^[a-z0-9_-]{2,40}$/),
   bet: z.number().finite().refine((value) => SLOT_BET_VALUES.includes(value as typeof SLOT_BET_VALUES[number]), 'INVALID_BET'),
