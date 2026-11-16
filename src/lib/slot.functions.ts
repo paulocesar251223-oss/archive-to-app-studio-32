@@ -19,10 +19,8 @@ async function checkSlotAccess(supabase: SupabaseClient<Database>, userId: strin
   // Game settings (incl. RTP) are staff-only via RLS; read them server-side after the caller is verified.
   const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
   const settings = await supabaseAdmin.from('game_settings').select('game,rtp,enabled,min_bet,max_bet').eq('game', game).maybeSingle();
-  if (profile.error) throwDb(profile.error);
   if (excluded.error) throwDb(excluded.error);
   if (settings.error) throwDb(settings.error);
-  if (!profile.data || profile.data.status !== 'approved') throw new Error('PLAYER_NOT_APPROVED');
   if (excluded.data) throw new Error('SELF_EXCLUDED');
   if (!settings.data || !settings.data.enabled) throw new Error('GAME_DISABLED');
   return settings.data;
