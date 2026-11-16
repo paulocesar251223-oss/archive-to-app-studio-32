@@ -15,6 +15,13 @@
       "when": 1794752654226,
       "tag": "0001_make_deposit_hash_optional",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794833913720,
+      "tag": "0002_restrict_settings_reads",
+      "breakpoints": true
     }
   ]
 }

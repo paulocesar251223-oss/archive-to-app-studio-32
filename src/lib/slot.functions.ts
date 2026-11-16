@@ -10,11 +10,15 @@ function throwDb(error: { message: string } | null): never {
 }
 
 async function checkSlotAccess(supabase: SupabaseClient<Database>, userId: string, game: string) {
-  const [profile, excluded, settings] = await Promise.all([
+  const [profile, excluded] = await Promise.all([
     supabase.from('profiles').select('status').eq('user_id', userId).maybeSingle(),
     supabase.rpc('is_self_excluded', { _user_id: userId }),
-    supabase.from('game_settings').select('game,rtp,enabled,min_bet,max_bet').eq('game', game).maybeSingle(),
   ]);
+  if (profile.error) throwDb(profile.error);
+  if (!profile.data || profile.data.status !== 'approved') throw new Error('PLAYER_NOT_APPROVED');
+  // Game settings (incl. RTP) are staff-only via RLS; read them server-side after the caller is verified.
+  const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+  const settings = await supabaseAdmin.from('game_settings').select('game,rtp,enabled,min_bet,max_bet').eq('game', game).maybeSingle();
   if (profile.error) throwDb(profile.error);
   if (excluded.error) throwDb(excluded.error);
   if (settings.error) throwDb(settings.error);
