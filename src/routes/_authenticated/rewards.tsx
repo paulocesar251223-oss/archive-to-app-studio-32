@@ -6,14 +6,11 @@ import { PlayerShell } from '@/components/player/player-shell';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { pageHead } from '@/lib/metadata';
 import { useI18n } from '@/i18n';
-import blackjack from '@/assets/playboy-blackjack.webp.asset.json';
-import baccarat from '@/assets/playboy-baccarat.webp.asset.json';
-import roulette from '@/assets/playboy-roulette.webp.asset.json';
 
 const liveGames = [
-  { name: 'Blackjack', image: blackjack.url },
-  { name: 'Baccarat', image: baccarat.url },
-  { name: 'Roulette', image: roulette.url },
+  { name: 'Blackjack', image: '/images/playboy-blackjack.webp' },
+  { name: 'Baccarat', image: '/images/playboy-baccarat.webp' },
+  { name: 'Roulette', image: '/images/playboy-roulette.webp' },
 ];
 
 export const Route = createFileRoute('/_authenticated/rewards')({
